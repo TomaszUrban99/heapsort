@@ -6,3 +6,4 @@ add_subdirectory(inc)
 
 add_executable(heapsort src/main.cpp)
 target_link_directories(heapsort PUBLIC inc/)
+target_link_libraries(heapsort PUBLIC titleRatingCollection)
