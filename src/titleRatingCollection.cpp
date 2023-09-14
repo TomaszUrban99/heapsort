@@ -1,7 +1,27 @@
 #include "../inc/titleRatingCollection.hh"
+#include <cstdio>
 
+int titleRatingCollection::reallocate()
+{
+    /* Allocate new memory */
+    titleRating** tmpPointer = new titleRating*[_vectorSize + initialSize];
+    titleRating** pointer;
 
-int titleRatingCollection::read(std::string &filename)
+    for ( int i = 0; i < _vectorSize; ++i ){
+        tmpPointer[i] = _titleRatingCollection[i];
+    }
+
+    _vectorSize = _vectorSize + initialSize;
+
+    pointer = _titleRatingCollection;
+    _titleRatingCollection = tmpPointer;
+
+    delete [] pointer;
+    
+    return _vectorSize;
+}
+
+int titleRatingCollection::read(char *filename)
 {
     /* Variable storing number of read records */
     int readRecords = 0;
@@ -15,29 +35,38 @@ int titleRatingCollection::read(std::string &filename)
     }
     
     /* Omit headers */
-    char readCharacter;
+    char readCharacter = 'o';
         while ( readCharacter != '\n'){
-            input >> readCharacter;
+           input.get(readCharacter);
         }
 
     /* Read data */
     while (!input.eof())
-    {
+    { 
         /* Check if there is enough space to store records */
-        if ( readRecords >=_titleRatingCollection.size() ){
-            _titleRatingCollection.resize(_titleRatingCollection.size()+initialSize);
+        if ( readRecords >=_vectorSize ){ 
+            reallocate();     
         }
 
-        _titleRatingCollection[readRecords] = new titleRating();
+        _titleRatingCollection[readRecords] = new titleRating (); 
         input >> *_titleRatingCollection[readRecords];
 
-        if (input.fail()){
+        if (input.fail() && !input.eof()){
             std::cerr << "Failed to read data" << std::endl;
             return -1;
         }
-
-        readRecords++;
+        
+        readRecords++;  
     }
 
+    _recordsNumber = _recordsNumber + readRecords;
+
     return readRecords;
+}
+
+void titleRatingCollection::print(std::ostream& outputStream)
+{
+    for ( int i = 0; i < _recordsNumber; ++i){
+        outputStream << *_titleRatingCollection[i] << std::endl;
+    }
 }

@@ -1,6 +1,7 @@
 #ifndef TITLE_RATING_COLLECTION_HH
 #define TITLE_RATING_COLLECTION_HH
 
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 #include <ostream>
@@ -9,7 +10,7 @@
 
 #include "titleRating.hh"
 
-constexpr int initialSize = 1000;
+constexpr int initialSize = 10000;
 
 /*!
     \brief Class titleRatingCollection representing a collection
@@ -17,7 +18,7 @@ constexpr int initialSize = 1000;
 */
 class titleRatingCollection{
 
-    std::vector<titleRating*> _titleRatingCollection;
+    titleRating** _titleRatingCollection;
     
     /* Number of records being stored in a collection of title ratings */
     int _recordsNumber = 0;
@@ -25,10 +26,16 @@ class titleRatingCollection{
     /* Total amount of fields allocated for vector _titleRatingCollection */
     int _vectorSize = initialSize;
 
+    int reallocate();
+
     public:
 
     titleRatingCollection() {
-        _titleRatingCollection.reserve(initialSize);
+        _titleRatingCollection = new titleRating*[initialSize];
+    }
+
+    ~titleRatingCollection() {
+        delete [] _titleRatingCollection;
     }
 
     /*!
@@ -36,7 +43,7 @@ class titleRatingCollection{
         \par std::string &filename reference to name input file
         \retval int number of records being read
     */
-    int read(std::string &filename );
+    int read(char *filename );
 
     /*!
         \brief Method to print data stored in titleRatingCollection
