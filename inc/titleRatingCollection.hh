@@ -35,6 +35,10 @@ class titleRatingCollection{
     }
 
     ~titleRatingCollection() {
+        
+        for ( int i = 0; i < _recordsNumber; ++i )
+            delete _titleRatingCollection[i];
+
         delete [] _titleRatingCollection;
     }
 

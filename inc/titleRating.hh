@@ -22,6 +22,10 @@ class titleRating {
 
     titleRating() {}
 
+    ~titleRating() {
+        std::cout << "Title rating. " << _tconst << " deleted" << std::endl;
+    }
+
     std::string& get_tconst () { return _tconst; }
 
     float& get_averageRating () { return _averageRating; }
