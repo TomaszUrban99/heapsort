@@ -7,10 +7,11 @@
 #include <ostream>
 #include <vector>
 #include <string>
+#include <algorithm> // contains swap function
 
 #include "titleRating.hh"
 
-constexpr int initialSize = 10000;
+constexpr int initialSize = 1000;
 
 /*!
     \brief Class titleRatingCollection representing a collection
@@ -26,9 +27,40 @@ class titleRatingCollection{
     /* Total amount of fields allocated for vector _titleRatingCollection */
     int _vectorSize = initialSize;
 
+    /*!
+        \brief Method for adding new memory to _titleRatingCollection.
+        \retval int _vectorSize - size of vector after reallocating memory
+    */
     int reallocate();
 
+    /*!
+        \brief Method returning parent's index of node with index i.
+    */
+    int parent ( int i ){
+        return i/2;
+    }
+
+    /*!
+        \brief Method returning left son's index of node with index i.
+    */
+    int left ( int i ){
+        return 2 * i + 1;
+    }
+
+    /*!
+        \brief Method returning right son's index of node with index i.
+    */
+    int right ( int i ){
+        return 2 * i + 2;
+    }
+
     public:
+
+    void maxHeapify ( int i );
+
+    void buildMaxHeap ();
+
+    void heapsort();
 
     titleRatingCollection() {
         _titleRatingCollection = new titleRating*[initialSize];
@@ -41,6 +73,8 @@ class titleRatingCollection{
 
         delete [] _titleRatingCollection;
     }
+
+    int getRecordsNumber () { return _recordsNumber; }
 
     /*!
         \brief Method for reading data from input file
